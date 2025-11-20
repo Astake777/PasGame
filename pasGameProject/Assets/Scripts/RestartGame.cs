@@ -6,4 +6,4 @@ public class RestartGame : MonoBehaviour
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("Level1");
     }
-} 
+}

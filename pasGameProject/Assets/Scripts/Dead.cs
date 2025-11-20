@@ -7,12 +7,8 @@ public class Dead : MonoBehaviour
     {
         if (collision.gameObject.tag == "Damage")
         {
-            Die();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-    }
 
-    private void Die()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
