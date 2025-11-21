@@ -3,59 +3,34 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    // Menyimpan instance tunggal SceneController (Singleton)
     public static SceneController instance;
 
     private void Awake()
     {
+        // Jika belum ada instance...
         if (instance == null)
         {
+            // Jadikan object ini sebagai instance utama
             instance = this;
+
+            // Jangan hancurkan object ini ketika pindah scene
             DontDestroyOnLoad(gameObject);
         }
         else
-        { 
-            Destroy(gameObject);
-        }
-    }
-    public void NextLevel() 
-    {
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
-    }
-
-    public void LoadScene(string sceneName) 
-    {
-        SceneManager.LoadSceneAsync(sceneName);
-    }
-
-    // Tambahkan di class SceneController
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        Debug.Log($"Scene loaded: {scene.name}");
-
-        // Reset semua system penting
-        Time.timeScale = 1;
-
-        // Cari semua player dan reset state mereka
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject player in players)
         {
-            Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector2.zero;
-                rb.angularVelocity = 0f;
-                rb.simulated = true;
-            }
+            // Jika sudah ada instance lain, hancurkan object ini
+            // Tujuannya agar hanya ada satu SceneController
+            Destroy(gameObject);
+
+            // Menghentikan eksekusi sisa kode
+            return;
         }
+    }
+
+    public void NextLevel()
+    {
+        // Mendapatkan index scene aktif, lalu memuat index berikutnya
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
