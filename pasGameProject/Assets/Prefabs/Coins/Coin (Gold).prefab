@@ -124,6 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 496db1ee61681024fa239a041facbf19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coinClip: {fileID: 8300000, guid: af2435b78ba5d44beab25e91ad49efb7, type: 3}
 --- !u!61 &6079921885355292295
 BoxCollider2D:
   m_ObjectHideFlags: 0

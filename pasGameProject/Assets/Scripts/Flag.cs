@@ -11,6 +11,9 @@ public class Flag : MonoBehaviour
         // Cek apakah yang menyentuh adalah objek ber tag kan Player
         if (collision.gameObject.tag == "Player")
         {
+            // Ambil script PlayerWalk dari player
+            PlayerWalk player = collision.gameObject.GetComponent<PlayerWalk>();
+
             // Pastikan game berjalan normal (tidak ter-pause)
             Time.timeScale = 1;
 

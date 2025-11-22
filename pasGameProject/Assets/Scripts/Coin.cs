@@ -3,6 +3,7 @@ using TMPro;
 
 public class Coin : MonoBehaviour
 {
+    public AudioClip coinClip;
     // UI teks tempat menampilkan jumlah coin
     private TextMeshProUGUI coinText;
 
@@ -23,6 +24,8 @@ public class Coin : MonoBehaviour
 
             // tambahkan jumlah coin milik player sebanyak 1
             player.coins += 1;
+
+            player.PlaySFX(coinClip);
 
             // update teks UI agar menampilkan total coin terbaru
             coinText.text = player.coins.ToString();

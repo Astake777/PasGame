@@ -147,4 +147,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbe65d77fe339dd45b0ad4160aa941da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  winClip: {fileID: 8300000, guid: 7cc7d37818ed341adae32e6fe9d640b5, type: 3}
   winUI: {fileID: 0}

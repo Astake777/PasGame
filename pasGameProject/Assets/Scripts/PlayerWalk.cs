@@ -14,18 +14,21 @@ public class PlayerWalk : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
     public float minY = -10f;     //Nilai minimum untuk kondisi dimana jika player jatuh terlalu rendah maka scene di load ulang
+    public AudioClip jumpClip;
 
     // Variable private
     private Rigidbody2D rb;
     private bool isGrounded;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();            
         animator = GetComponent<Animator>();        
         spriteRenderer = GetComponent<SpriteRenderer>(); 
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -39,12 +42,17 @@ public class PlayerWalk : MonoBehaviour
         // Lompatan (hanya jika menyentuh tanah)
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
+            //menggerakkan player ke atas dengan menambahkan kecepatan vertikal sebesar jumpForce
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+            //memutar sound effect lompat
+            PlaySFX(jumpClip);
         }
 
         // Restart scene jika player jatuh terlalu rendah
         if (transform.position.y < minY)
         {
+            //scene yang di load adalah scene yang sedang aktif
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
@@ -54,10 +62,13 @@ public class PlayerWalk : MonoBehaviour
         // mengatur animasi yang dimainkan berdasarkan arah gerak
         // jika bergerak ke kanan (saat menekan tombol D atau panah kanan), tidak perlu di-flip
         // jika bergerak ke kiri (saat menekan tombol A atau panah kiri), di-flip secara horizontal
+
+        // jika moveInput > 0 (berarti player menekan tombol D atau panah kanan) berarti player bergerak ke kanan
         if (moveInput > 0)
         {
             spriteRenderer.flipX = false;   // Menghadap kanan
         }
+        // jika moveInput < 0 (berarti player menekan tombol A atau panah kiri) berarti player bergerak ke kiri
         else if (moveInput < 0)
         {
             spriteRenderer.flipX = true;    // Menghadap kiri
@@ -66,7 +77,7 @@ public class PlayerWalk : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Cek apakah groundCheck menyentuh ground
+        // Cek apakah groundCheck dari player menyentuh ground
         isGrounded = Physics2D.OverlapCircle(
             groundCheck.position,
             groundCheckRadius,
@@ -78,13 +89,13 @@ public class PlayerWalk : MonoBehaviour
     {
         if (isGrounded)
         {
-            // jika player di tanah maka animasi idle atau run dijalankan
-            // jika kecepatan horizontal dari player = 0 maka animasi idle dijalankan
+            // jika player di tanah dan moveInput maka animasi idle atau run dijalankan
+            // jika kecepatan horizontal dari player = 0 (yang berarti moveInput = 0 dikarenakan user tidak menekan apa-apa) maka animasi idle dijalankan
             if (moveInput == 0)
             {
                 animator.Play("Player_Idle");
             }
-            // atau animasi run dijalankan (ketika nilai kecepatan horizontal dari player tidak sama dengan 0)
+            // atau animasi run dijalankan (ketika nilai kecepatan horizontal dari player tidak sama dengan 0. Yang berarti user menekan tombol A/D atau panah kiri/kanan)
             else
             {
                 animator.Play("Player_Run");
@@ -103,5 +114,10 @@ public class PlayerWalk : MonoBehaviour
                 animator.Play("Player_Fall");
             }
         }
+    }
+    public void PlaySFX(AudioClip audioClip)
+    {
+        audioSource.clip = audioClip; // menentukan suara yang diputar, misalnya jumpClip
+        audioSource.Play();         // memutar suara
     }
 }
